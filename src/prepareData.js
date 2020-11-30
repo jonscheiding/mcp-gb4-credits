@@ -74,6 +74,9 @@ function prepareItem(item) {
   pluralizeCredits(result.Credits);
 
   result.Byline = result.Byline.split('\n');
+  if(result.Other !== undefined) {
+    result.Other = result.Other.split('\n');
+  }
 
   return result;
 }

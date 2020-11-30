@@ -1,5 +1,8 @@
 svg {
   font-family: lato;
+}
+
+svg.test {
   background-color: black;
 }
 
