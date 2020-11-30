@@ -1,15 +1,56 @@
-import './App.css';
+import React from 'react';
 
-function CreditText({y, className, height, children}) {
+const BASE_FONT_SIZE_PX = 16;
+
+const STYLES = {
+  base: {
+    fill: 'white',
+    textTransform: 'uppercase',
+    textAnchor: 'middle',
+    dominantBaseline: 'hanging',
+    fontStyle: 'normal'
+  },
+    
+  title: {
+    fontWeight: 700
+  },
+    
+  byline: {
+    fontWeight: 200,
+    fontStyle: 'italic',
+    textTransform: 'none'
+  },
+    
+  role: {
+    fontWeight: 100
+  },
+
+  name: {
+    fontWeight: 400
+  }
+};
+
+function CreditText({y, type, height, text}) {
+  const style = {
+    ...STYLES.base,
+    ...STYLES[type],
+    fontSize: `${height * BASE_FONT_SIZE_PX}px`
+  };
+
+  if(style.textTransform === 'uppercase') {
+    text = text.toUpperCase();
+  }
+
   return (
-    <text x="50%" y={`${y}rem`} className={className}
-      style={{fontSize: `${height}rem`}}>
-      {children}
+    <text x="50%" y={y * BASE_FONT_SIZE_PX} style={style}>
+      {text}
     </text>
   );
 }
 
 function App({elements, width, height, ratio, className}) {
+  ratio = ratio || 1;
+
   const renderWidth = width;
   const renderHeight = height;
   const displayWidth = renderWidth * ratio;
@@ -17,15 +58,21 @@ function App({elements, width, height, ratio, className}) {
 
   return (
     <svg className={className}
+      style={{fontFamily: 'Lato, sans-serif'}}
       width={displayWidth} height={displayHeight}
       viewBox={`0 0 ${renderWidth} ${renderHeight}`}>
 
+      <defs>
+          <style>
+              @import url("https://fonts.googleapis.com/css?family=Lato:100,200,300,400,700");
+          </style>
+      </defs>
+
       {elements.map(e => 
         <CreditText
-          key={e.index} className={e.type}
-          y={e.y} height={e.height}>
-          {e.text}
-        </CreditText>
+          key={e.index} type={e.type}
+          y={e.y} height={e.height}
+          text={e.text} />
       )}
     </svg>
   );

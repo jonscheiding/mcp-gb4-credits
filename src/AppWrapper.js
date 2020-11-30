@@ -1,6 +1,8 @@
 import App from './App';
 import prepareElements from './prepareElements';
 
+import './AppWrapper.css';
+
 function AppWrapper() {
   const {elements, width, height} = prepareElements();
 
