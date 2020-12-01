@@ -6,7 +6,7 @@ async function prepareCsv(file) {
 
   console.log(data);
 
-  fs.writeFileSync('./src/credits.json', JSON.stringify(data));
+  fs.writeFileSync('./src/credits.json', JSON.stringify(data, null, '  '));
 }
 
 const args = process.argv.slice(2);
