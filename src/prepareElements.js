@@ -2,6 +2,8 @@ import prepareData from './prepareData';
 import credits from './credits.json';
 import creditsStaff from './credits-staff.json';
 
+export const BASE_FONT_SIZE_PX = 15;
+
 const SPACING = {
   title: 5,
   byline: 3,
@@ -80,7 +82,7 @@ export default function prepareElements() {
   }
 
   const width = 1920;
-  const height = position.y * 16;
+  const height = position.y * BASE_FONT_SIZE_PX;
 
   return { elements, width, height };
 }

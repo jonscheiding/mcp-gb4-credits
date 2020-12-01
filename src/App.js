@@ -1,6 +1,6 @@
 import React from 'react';
 
-const BASE_FONT_SIZE_PX = 16;
+import { BASE_FONT_SIZE_PX } from './prepareElements';
 
 const STYLES = {
   base: {
