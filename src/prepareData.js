@@ -73,7 +73,25 @@ function prepareItem(item) {
 
   pluralizeCredits(result.Credits);
 
-  result.Byline = result.Byline.split('\n');
+  delete result.Byline;
+
+  result.Byline = [`from "${result.Show}"`];
+  if(result.Music !== undefined) {
+    if(result.Music === result.Lyrics) {
+      result.Byline.push(`Music and Lyrics by ${result.Music}`);
+    } else {
+      result.Byline.push(
+        `Music by ${result.Music}`,
+        `Lyrics by ${result.Lyrics}`
+      );
+    }
+  } else if (result.Writer !== undefined) {
+    result.Byline.push(
+      `Written by ${result.Writer}`,
+      `Adapted by ${result.Adapter}`
+    );
+  }
+  
   if(result.Other !== undefined) {
     result.Other = result.Other.split('\n');
   }
