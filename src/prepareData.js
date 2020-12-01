@@ -1,15 +1,15 @@
 function byOrderOrTitle(a, b) {
-  if(a.Order === undefined && b.Order === undefined) {
+  if(isNaN(a.Order) && isNaN(b.Order)) {
     if(a.Title < b.Title) return -1;
     if(a.Title > b.Title) return 1;
-    return 0;
   }
 
-  if(a.Order && (a.Order < b.Order || !b.Order)) {
-      return -1;
-  } else if(b.Order && (b.Order < a.Order || !a.Order)) {
-      return 1;
-  }
+  if(!isNaN(a.Order) && isNaN(b.Order)) return -1;
+  if(isNaN(a.Order) && !isNaN(b.Order)) return 1;
+
+  if(a.Order < b.Order) return -1;
+  if(a.Order > b.Order) return 1;
+
   return 0;
 }
 
@@ -39,6 +39,31 @@ function pluralizeCredits(creditList) {
   }
 }
 
+function createByline(result) {
+  if(result.Show === undefined) {
+    return undefined;
+  }
+
+  const byline = [`from "${result.Show}"`];
+  if(result.Music !== undefined) {
+    if(result.Music === result.Lyrics) {
+      byline.push(`Music and Lyrics by ${result.Music}`);
+    } else {
+      byline.push(
+        `Music by ${result.Music}`,
+        `Lyrics by ${result.Lyrics}`
+      );
+    }
+  } else if (result.Writer !== undefined) {
+    byline.push(
+      `Written by ${result.Writer}`,
+      `Adapted by ${result.Adapter}`
+    );
+  }
+
+  return byline;
+}
+
 function prepareItem(item) {
   const result = {
     ...item
@@ -51,18 +76,20 @@ function prepareItem(item) {
     }
   }
 
-  if(result.Order !== undefined) {
-    result.Order = Number(result.Order);
-  }
+  result.Order = Number(result.Order);
+  if(isNaN(result.Order)) result.Order = undefined;
 
   result.Credits = [];
 
-  addCredit(result.Credits, 'Performer', result.Cast);
-  addCredit(result.Credits, 'Director', result.Director);
-  addCredit(result.Credits, 'Choreographer', result.Choreographer);
-  addCredit(result.Credits, 'Videographer', result.Videographer);
-  addCredit(result.Credits, 'Editor', result.Editor);
-  addCredit(result.Credits, 'Puppeteer', result.Puppeteer);
+  const roles = [
+    'Producer', 'Performer', 'Director', 'Choreographer',
+    'Videographer', 'Editor', 'Puppeteer',
+    'Music Director', 'Technical Director', 'Sound Engineer'
+  ];
+
+  for(const role of roles) {
+    addCredit(result.Credits, role, result[role]);
+  }
   
   if(result.Thanks !== undefined) {
     result.Credits.push({
@@ -73,25 +100,8 @@ function prepareItem(item) {
 
   pluralizeCredits(result.Credits);
 
-  delete result.Byline;
+  result.Byline = createByline(result);
 
-  result.Byline = [`from "${result.Show}"`];
-  if(result.Music !== undefined) {
-    if(result.Music === result.Lyrics) {
-      result.Byline.push(`Music and Lyrics by ${result.Music}`);
-    } else {
-      result.Byline.push(
-        `Music by ${result.Music}`,
-        `Lyrics by ${result.Lyrics}`
-      );
-    }
-  } else if (result.Writer !== undefined) {
-    result.Byline.push(
-      `Written by ${result.Writer}`,
-      `Adapted by ${result.Adapter}`
-    );
-  }
-  
   if(result.Other !== undefined) {
     result.Other = result.Other.split('\n');
   }

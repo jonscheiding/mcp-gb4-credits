@@ -6,8 +6,6 @@ import './AppWrapper.css';
 function AppWrapper() {
   const {elements, width, height} = prepareElements();
 
-  console.log(elements);
-
   return (
     <App elements={elements} 
       width={width} height={height} 

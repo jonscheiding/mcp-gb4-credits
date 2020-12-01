@@ -1,6 +1,5 @@
 import prepareData from './prepareData';
 import credits from './credits.json';
-import creditsStaff from './credits-staff.json';
 
 export const BASE_FONT_SIZE_PX = 15;
 
@@ -48,21 +47,25 @@ function prepareCreditElements(credits, position) {
 function prepareSectionElements(section, position) {
   const elements = [];
 
-  elements.push(prepareElement("title", position, section.Title));
-  position.y += SPACING.paragraph;
+  if(section.Order !== 0) {
+    elements.push(prepareElement("title", position, section.Title));
+    position.y += SPACING.paragraph;
+  }
 
-  for(const line of section.Byline) {
-    elements.push(prepareElement("byline", position, line));
+  if(section.Byline !== undefined) {
+    for(const line of section.Byline) {
+      elements.push(prepareElement("byline", position, line));
+    }
   }
 
   position.y += SPACING.section;
-
   elements.push(...prepareCreditElements(section.Credits, position));
 
   if(section.Other !== undefined) {
     for(const line of section.Other) {
       elements.push(prepareElement("role", position, line));
     }
+    position.y += SPACING.section;
   }
 
   return elements;
@@ -72,14 +75,14 @@ export default function prepareElements() {
   const position = {y: SPACING.section, index: 0};
   const elements = [];
 
-  elements.push(...prepareCreditElements(creditsStaff, position));
-
   const sectionCredits = prepareData(credits);
 
   for(const section of sectionCredits) {
     position.y += SPACING.section;
     elements.push(...prepareSectionElements(section, position));
   }
+
+  position.y += SPACING.section * 2;
 
   const width = 1920;
   const height = position.y * BASE_FONT_SIZE_PX;
