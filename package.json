@@ -1,7 +1,7 @@
 {
-  "name": "gb20-credits",
+  "name": "mcp-gb4-credits",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@babel/core": "^7.12.9",
     "@testing-library/jest-dom": "^5.11.4",
@@ -44,5 +44,10 @@
     "@babel/preset-react": "^7.12.7",
     "command-line-args": "^5.1.1",
     "svg2img": "^0.9.0"
-  }
+  },
+  "description": "Credits generator for MCP's 4th annual Gender Bender Revue",
+  "main": "index.js",
+  "repository": "git@github.com:jonscheiding/mcp-gb4-credits.git",
+  "author": "Jon Scheiding <jonscheiding@gmail.com>",
+  "license": "MIT"
 }
