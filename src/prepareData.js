@@ -90,15 +90,15 @@ function prepareItem(item) {
   for(const role of roles) {
     addCredit(result.Credits, role, result[role]);
   }
-  
+
+  pluralizeCredits(result.Credits);
+
   if(result.Thanks !== undefined) {
     result.Credits.push({
       Roles: ['Special Thanks To'],
-      Names: result.Thanks
+      Names: result.Thanks.split('\n')
     });
   }
-
-  pluralizeCredits(result.Credits);
 
   result.Byline = createByline(result);
 
