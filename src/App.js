@@ -27,6 +27,10 @@ const STYLES = {
 
   name: {
     fontWeight: 400
+  },
+
+  name_small: {
+    fontWeight: 400
   }
 };
 

@@ -8,6 +8,7 @@ const SPACING = {
   byline: 3,
   role: 3.5,
   name: 4,
+  name_small: 3.2,
 
   line: 0.125,
   paragraph: 0.5,
@@ -34,8 +35,14 @@ function prepareCreditElements(credits, position) {
 
     position.y += SPACING.paragraph;
 
-    for(const name of credit.Names) {
-      elements.push(prepareElement("name", position, name));
+    for(let name of credit.Names) {
+      let type = 'name';
+      if(name.startsWith('- ')) {
+        name = name.replace('- ', '');
+        type = 'name_small';
+      }
+
+      elements.push(prepareElement(type, position, name));
     }
 
     position.y += SPACING.section;
@@ -50,15 +57,16 @@ function prepareSectionElements(section, position) {
   if(section.Order !== 0) {
     elements.push(prepareElement("title", position, section.Title));
     position.y += SPACING.paragraph;
-  }
 
-  if(section.Byline !== undefined) {
-    for(const line of section.Byline) {
-      elements.push(prepareElement("byline", position, line));
+    if(section.Byline !== undefined) {
+      for(const line of section.Byline) {
+        elements.push(prepareElement("byline", position, line));
+      }
     }
-  }
 
-  position.y += SPACING.section;
+    position.y += SPACING.section;
+  }
+  
   elements.push(...prepareCreditElements(section.Credits, position));
 
   if(section.Other !== undefined) {
@@ -78,7 +86,7 @@ export default function prepareElements() {
   const sectionCredits = prepareData(credits);
 
   for(const section of sectionCredits) {
-    position.y += SPACING.section;
+    if(position.index > 0) position.y += SPACING.section;
     elements.push(...prepareSectionElements(section, position));
   }
 
